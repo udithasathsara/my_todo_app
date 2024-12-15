@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
 const Home = ()=>{
     const [tab, setTab] = useState(1);
     const [task, setTask] = useState(null);
     const [taskDesc, setTaskDesc] = useState(null);
+    const [todos, setTodos] = useState(null);
 
     const handleTabs = (tab) =>{
         setTab(tab);
@@ -13,9 +14,19 @@ const Home = ()=>{
     const handleAddTask = (e) =>{
         e.preventDefault();
         axios.post('http://localhost:5000/new-task' , {task,taskDesc})
+        .then(res =>{
+            setTodos(res.data)
+            setTask('')
+        });
     }
 
-
+    useEffect(() => {
+        axios.get('http://localhost:5000/read-task')
+        .then(res =>{
+            setTodos(res.data)
+            
+        })
+    }, [])
 
     return(
         <div className='bg-gray-100 w-screen h-screen'>
@@ -33,19 +44,23 @@ const Home = ()=>{
                     <p onClick={()=> handleTabs(2)} className={`${tab === 2 ? 'text-blue-700':'text-black'} cursor-pointer`}>Active</p>
                     <p onClick={()=> handleTabs(3)} className={`${tab === 3 ? 'text-blue-700':'text-black'} cursor-pointer`}>Completed</p>
                 </div>
-                <div className='flex justify-between bg-white p-3 w-[540px] mt-3 rounded-md'>
-                    <div>
-                        <p className='text-lg text-semibold text-zinc-950'>Buy Rice</p>
-                        <p className='text-sm text-semibold text-zinc-950'>yellow Rice with chicken devil</p>
-                        <p className='text-xs text-gray-600'>15/12/2024 10.30</p>
-                        <p className='text-sm text-gray-700'>Status : Active</p>
-                    </div>
-                    <div className='flex flex-col text-sm justify-start items-start'>
-                        <button className='text-lg text-blue-600 cursor-pointer'>Edit</button>
-                        <button className='text-lg text-red-600 cursor-pointer'>Delete</button>
-                        <button className='text-lg text-green-600 cursor-pointer'>Completed</button>
-                    </div>
-                </div>
+                {
+                    todos?.map(todo =>(
+                        <div className='flex justify-between bg-white p-3 w-[540px] mt-3 rounded-md'>
+                            <div>
+                                <p className='text-lg text-semibold text-zinc-950'>{todo.taskName}</p>
+                                <p className='text-sm text-semibold text-zinc-950'>{todo.taskDesc}</p>
+                                <p className='text-xs text-gray-600'>{new Date(todo.createdAt).toLocaleDateString()}</p>
+                                <p className='text-sm text-gray-700'>Status : Active</p>
+                            </div>
+                            <div className='flex flex-col text-sm justify-start items-start'>
+                                <button className='text-lg text-blue-600 cursor-pointer'>Edit</button>
+                                <button className='text-lg text-red-600 cursor-pointer'>Delete</button>
+                                <button className='text-lg text-green-600 cursor-pointer'>Completed</button>
+                            </div>
+                        </div>
+                    ))
+                }
             </div>
             
         </div>

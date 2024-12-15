@@ -25,14 +25,30 @@ db.connect((err) =>{
 
 app.post('/new-task', (req, res) =>{
     console.log(req.body)
-    const q = 'insert into todos (taskName, taskDesc, createdAt) VALUES (?,?,?)';
-    db.query(q, [req.body.task, req.body.taskDesc, new Date()], (err, result) =>{
+    const q = 'insert into todos (taskName, taskDesc, createdAt, status) VALUES (?,?,?,?)';
+    db.query(q, [req.body.task, req.body.taskDesc, new Date(), 'active'], (err, result) =>{
         if (err) {
            console.log(err);
             
         } else {
             console.log("todo saved");
+            const updatedTasks = 'select * from todos'
+            db.query(updatedTasks, (error, newList) => {
+                res.send(newList)
+            })
             
+        }
+    })
+})
+
+app.get('/read-task', (req, res) => {
+    const q = 'select * from todos';
+    db.query(q, (err, result) => {
+        if (err) {
+            console.log("failed to read tasks");      
+        } else {
+            console.log("got tasks successfully from todo");
+            res.send(result);
         }
     })
 })
