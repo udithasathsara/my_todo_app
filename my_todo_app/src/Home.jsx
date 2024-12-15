@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'
 
 const Home = ()=>{
     const [tab, setTab] = useState(1);
@@ -11,8 +12,10 @@ const Home = ()=>{
 
     const handleAddTask = (e) =>{
         e.preventDefault();
-   
+        axios.post('http://localhost:5000/new-task' , {task,taskDesc})
     }
+
+
 
     return(
         <div className='bg-gray-100 w-screen h-screen'>
