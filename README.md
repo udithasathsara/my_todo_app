@@ -3,6 +3,7 @@ Task Manager Application
 This is a small React application that allows users to manage a list of tasks. Users can add, edit, delete, and mark tasks as completed. Additionally, tasks can be filtered based on their status.
 
 Features
+
 -Task List: Displays tasks with the following fields
 -Task Name
 -Description
@@ -14,10 +15,12 @@ Features
 -Filter Tasks: Users can filter tasks by their status (All, Completed, Not Completed).
 
 Technologies Used
+
 -Frontend: React with hooks, Tailwind CSS
 -Backend: Node.js with Express.js, MySQL
 
 Prerequisites
+
 -Before running the application, ensure you have the following installed on your system:
 -Node.js (v14 or higher)
 -MySQL
@@ -26,6 +29,7 @@ Prerequisites
 Installation and Setup
 
 Backend Setup
+
 -Clone the repository:
 -git clone <repository-link>
 -Navigate to the backend directory:
@@ -34,6 +38,7 @@ Backend Setup
 -npm install
 
 Configure the database:
+
 -Create a MySQL database.
 -export DB_File.sql
 -Update the database connection details in the index.js file:
@@ -48,9 +53,11 @@ const db = mysql.createConnection({
 
 
 Run database migrations (if applicable):
+
 -node migrate.js
 
 Start the backend server:
+
 node index
 npm start
 
@@ -67,6 +74,7 @@ Frontend Setup
 -The frontend will be running at http://localhost:5173.
 
 How to Run the Application
+
 -Start the backend server:
 -cd backend
 -npm start or node index
