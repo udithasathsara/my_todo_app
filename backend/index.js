@@ -53,6 +53,43 @@ app.get('/read-task', (req, res) => {
     })
 })
 
+app.post('/update-task', (req,res) => {
+    console.log(req.body);
+    const q = 'update todos set taskName = ? , taskDesc = ? where id = ?'
+    db.query(q, [req.body.updatedTask, req.body.updatedTaskDesc, req.body.updateId], (err, result) => {
+        if (err) {
+            console.log("failed to update");
+        } else {
+            console.log("Updated");
+            db.query('select * from todos', (e,r) =>{
+                if (e) {
+                    console.log(e);
+                    
+                } else {
+                   res.send(r); 
+                }
+            })
+            
+        }
+    })
+    
+})
+
+app.post('/delete-task', (req, res) =>{
+    const q = 'delete from todos where id = ?'
+    db.query(q, [req.body.id], (err, result) =>{
+        if (err) {
+            console.log('Failed to delete');
+            
+        } else {
+            console.log('Delete Successfully');
+            db.query('select * from todos', (e,newList) =>{
+                res.send(newList);
+            })
+        }
+    })
+})
+
 app.listen(5000, () => {
     console.log("Server Started");
 })

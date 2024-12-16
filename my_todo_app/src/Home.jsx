@@ -6,6 +6,9 @@ const Home = ()=>{
     const [task, setTask] = useState(null);
     const [taskDesc, setTaskDesc] = useState(null);
     const [todos, setTodos] = useState(null);
+    const [isEdit, setIsEdit] = useState(false);
+
+
 
     const handleTabs = (tab) =>{
         setTab(tab);
@@ -17,6 +20,7 @@ const Home = ()=>{
         .then(res =>{
             setTodos(res.data)
             setTask('')
+            setTaskDesc(''); 
         });
     }
 
@@ -28,6 +32,47 @@ const Home = ()=>{
         })
     }, [])
 
+    const [updateId, setUpdateId] = useState(null);
+    const [updatedTask, setUpdatedTask] = useState('');
+    const [updatedTaskDesc, setUpdatedTaskDesc] = useState('');
+
+    const handleEdit = (id, taskName, taskDesc ) => {
+        setIsEdit(true)
+        setTask(taskName)
+        setTaskDesc(taskDesc)
+        setUpdatedTask(taskName)
+        setUpdatedTaskDesc(taskDesc)
+        setUpdateId(id)
+
+    }
+
+    const updateTask = () => {
+        axios.post('http://localhost:5000/update-task', {updateId, updatedTask, updatedTaskDesc})
+        .then(res =>{
+            setTodos(res.data)
+            setTask('')
+            setTaskDesc('')
+        })
+
+    }
+    //     axios.post('http://localhost:5000/update-task', { updateId, updatedTask, updatedTaskDesc })
+    //         .then(res => {
+    //             setTodos(res.data); // Update todos with the new data
+    //             setTask(''); // Clear inputs
+    //             setTaskDesc('');
+    //             setIsEdit(false); // Exit edit mode
+    //         })
+    //         .catch(err => console.error('Failed to update task:', err));
+    // };
+
+    const handleDelete = (id) =>{
+        console.log(id);
+        axios.post('http://localhost:5000/delete-task',{id})
+        .then(res =>{
+            setTodos(res.data)
+        })
+    }
+
     return(
         <div className='bg-gray-100 w-screen h-screen'>
             <div className='flex flex-col w-screen h-screen justify-center items-center'>
@@ -37,7 +82,7 @@ const Home = ()=>{
                 <div className='flex gap-3'>
                     <input value={task} onChange={e => setTask(e.target.value)} className="bg-gray-100 text-zinc-950 p-2 outline-none border border-blue-300 rounded-md w-64" type="text" placeholder='Enter Task Name' />
                     <input value={taskDesc} onChange={e => setTaskDesc(e.target.value)}className="bg-gray-100 text-zinc-950 p-2 outline-none border border-blue-300 rounded-md w-64" type="text" placeholder='Enter Task Description'/>
-                    <button onClick={handleAddTask} className='bg-blue-600 px-4 rounded-md text-2xl'>ADD</button>
+                    <button className='bg-blue-600 px-4 rounded-md text-2xl'>{isEdit?<button onClick={updateTask}>Update</button>:<button onClick={handleAddTask}>Add</button>}</button>
                 </div>
                 <div className='text-zinc-950 flex tex-sm w-[540px]  justify-evenly mt-4'>
                     <p onClick={()=> handleTabs(1)} className={`${tab === 1 ? 'text-blue-700':'text-black'} cursor-pointer`}>All</p>
@@ -54,8 +99,8 @@ const Home = ()=>{
                                 <p className='text-sm text-gray-700'>Status : Active</p>
                             </div>
                             <div className='flex flex-col text-sm justify-start items-start'>
-                                <button className='text-lg text-blue-600 cursor-pointer'>Edit</button>
-                                <button className='text-lg text-red-600 cursor-pointer'>Delete</button>
+                                <button className='text-lg text-blue-600 cursor-pointer' onClick={() =>handleEdit(todo.id, todo.taskName, todo.taskDesc)}>Edit</button>
+                                <button className='text-lg text-red-600 cursor-pointer' onClick={() => handleDelete(todo.id)}>Delete</button>
                                 <button className='text-lg text-green-600 cursor-pointer'>Completed</button>
                             </div>
                         </div>
