@@ -56,9 +56,9 @@ app.get('/read-task', (req, res) => {
 app.post('/update-task', (req,res) => {
     console.log(req.body);
     const q = 'update todos set taskName = ? , taskDesc = ? where id = ?'
-    db.query(q, [req.body.updatedTask, req.body.updatedTaskDesc, req.body.updateId], (err, result) => {
+    db.query(q, [req.body.task, req.body.taskDesc, req.body.updateId], (err, result) => {
         if (err) {
-            console.log("failed to update");
+            console.log(err);
         } else {
             console.log("Updated");
             db.query('select * from todos', (e,r) =>{

@@ -34,33 +34,31 @@ const Home = ()=>{
     }, [])
 
     const handleEdit = (id, taskName, taskDesc ) => {
-        setIsEdit(true)
-        setTask(taskName)
-        setTaskDesc(taskDesc)
-        setUpdatedTask(taskName)
-        setUpdatedTaskDesc(taskDesc)
-        setUpdateId(id)
+        setIsEdit(true);
+        setTask(taskName);           // Populate the input fields
+        setTaskDesc(taskDesc);       // Populate the input fields
+        setUpdatedTask(taskName);    // Sync with the updatedTask state
+        setUpdatedTaskDesc(taskDesc);// Sync with the updatedTaskDesc state
+        setUpdateId(id);
 
     }
 
     const updateTask = () => {
-        axios.post('http://localhost:5000/update-task', {updateId, updatedTask, updatedTaskDesc})
+        axios.post('http://localhost:5000/update-task', {
+        updateId,
+        task,
+        taskDesc
+        })
         .then(res =>{
-            setTodos(res.data)
-            setTask('')
-            setTaskDesc('')
+            setTodos(res.data);       // Update the todos state with the latest data
+            setTask('');              // Clear the input fields
+            setTaskDesc('');
+            setUpdatedTask('');       // Reset the updatedTask state
+            setUpdatedTaskDesc('');
+            setIsEdit(false);; 
         })
 
     }
-    //     axios.post('http://localhost:5000/update-task', { updateId, updatedTask, updatedTaskDesc })
-    //         .then(res => {
-    //             setTodos(res.data); // Update todos with the new data
-    //             setTask(''); // Clear inputs
-    //             setTaskDesc('');
-    //             setIsEdit(false); // Exit edit mode
-    //         })
-    //         .catch(err => console.error('Failed to update task:', err));
-    // };
 
     const handleDelete = (id) =>{
         console.log(id);
