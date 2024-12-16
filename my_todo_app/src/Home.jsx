@@ -94,7 +94,7 @@ const Home = ()=>{
                     <p onClick={()=> handleTabs(3)} className={`${tab === 3 ? 'text-blue-700':'text-black'} cursor-pointer`}>Completed</p>
                 </div>
                 {
-                    todos?.map(todo =>(
+                    tab == 1 && todos?.map(todo =>(
                         <div className='flex justify-between bg-white p-3 w-[540px] mt-3 rounded-md'>
                             <div>
                                 <p className='text-lg text-semibold text-zinc-950'>{todo.taskName}</p>
@@ -106,6 +106,38 @@ const Home = ()=>{
                                 <button className='text-lg text-blue-600 cursor-pointer' onClick={() =>handleEdit(todo.id, todo.taskName, todo.taskDesc)}>Edit</button>
                                 <button className='text-lg text-red-600 cursor-pointer' onClick={() => handleDelete(todo.id)}>Delete</button>
                                 <button className='text-lg text-green-600 cursor-pointer' onClick={() => handleComplete(todo.id)}>Completed</button>
+                            </div>
+                        </div>
+                    ))
+                }
+                {
+                    tab == 2 && todos?.filter(todo => todo.status == 'active').map(todo =>(
+                        <div className='flex justify-between bg-white p-3 w-[540px] mt-3 rounded-md'>
+                            <div>
+                                <p className='text-lg text-semibold text-zinc-950'>{todo.taskName}</p>
+                                <p className='text-sm text-semibold text-zinc-950'>{todo.taskDesc}</p>
+                                <p className='text-xs text-gray-600'>{new Date(todo.createdAt).toLocaleDateString()}</p>
+                                <p className='text-sm text-gray-700'>Status : {todo.status}</p>
+                            </div>
+                            <div className='flex flex-col text-sm justify-start items-start'>
+                                <button className='text-lg text-blue-600 cursor-pointer' onClick={() =>handleEdit(todo.id, todo.taskName, todo.taskDesc)}>Edit</button>
+                                <button className='text-lg text-red-600 cursor-pointer' onClick={() => handleDelete(todo.id)}>Delete</button>
+                                <button className='text-lg text-green-600 cursor-pointer' onClick={() => handleComplete(todo.id)}>Completed</button>
+                            </div>
+                        </div>
+                    ))
+                }
+                {
+                    tab == 3 && todos?.filter(todo => todo.status == 'completed').map(todo =>(
+                        <div className='flex justify-between bg-white p-3 w-[540px] mt-3 rounded-md'>
+                            <div>
+                                <p className='text-lg text-semibold text-zinc-950'>{todo.taskName}</p>
+                                <p className='text-sm text-semibold text-zinc-950'>{todo.taskDesc}</p>
+                                <p className='text-xs text-gray-600'>{new Date(todo.createdAt).toLocaleDateString()}</p>
+                                <p className='text-sm text-gray-700'>Status : {todo.status}</p>
+                            </div>
+                            <div className='flex flex-col text-sm justify-center items-center'>
+                                <button className='text-lg text-red-600 cursor-pointer' onClick={() => handleDelete(todo.id)}>Delete</button>
                             </div>
                         </div>
                     ))
