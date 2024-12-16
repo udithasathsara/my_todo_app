@@ -7,8 +7,9 @@ const Home = ()=>{
     const [taskDesc, setTaskDesc] = useState(null);
     const [todos, setTodos] = useState(null);
     const [isEdit, setIsEdit] = useState(false);
-
-
+    const [updateId, setUpdateId] = useState(null);
+    const [updatedTask, setUpdatedTask] = useState('');
+    const [updatedTaskDesc, setUpdatedTaskDesc] = useState('');
 
     const handleTabs = (tab) =>{
         setTab(tab);
@@ -31,10 +32,6 @@ const Home = ()=>{
             
         })
     }, [])
-
-    const [updateId, setUpdateId] = useState(null);
-    const [updatedTask, setUpdatedTask] = useState('');
-    const [updatedTaskDesc, setUpdatedTaskDesc] = useState('');
 
     const handleEdit = (id, taskName, taskDesc ) => {
         setIsEdit(true)
@@ -73,6 +70,13 @@ const Home = ()=>{
         })
     }
 
+    const handleComplete = (id) =>{
+        axios.post('http://localhost:5000/complete-task',{id})
+        .then(res =>{
+            setTodos(res.data)
+        })
+    }
+
     return(
         <div className='bg-gray-100 w-screen h-screen'>
             <div className='flex flex-col w-screen h-screen justify-center items-center'>
@@ -96,12 +100,12 @@ const Home = ()=>{
                                 <p className='text-lg text-semibold text-zinc-950'>{todo.taskName}</p>
                                 <p className='text-sm text-semibold text-zinc-950'>{todo.taskDesc}</p>
                                 <p className='text-xs text-gray-600'>{new Date(todo.createdAt).toLocaleDateString()}</p>
-                                <p className='text-sm text-gray-700'>Status : Active</p>
+                                <p className='text-sm text-gray-700'>Status : {todo.status}</p>
                             </div>
                             <div className='flex flex-col text-sm justify-start items-start'>
                                 <button className='text-lg text-blue-600 cursor-pointer' onClick={() =>handleEdit(todo.id, todo.taskName, todo.taskDesc)}>Edit</button>
                                 <button className='text-lg text-red-600 cursor-pointer' onClick={() => handleDelete(todo.id)}>Delete</button>
-                                <button className='text-lg text-green-600 cursor-pointer'>Completed</button>
+                                <button className='text-lg text-green-600 cursor-pointer' onClick={() => handleComplete(todo.id)}>Completed</button>
                             </div>
                         </div>
                     ))

@@ -90,6 +90,19 @@ app.post('/delete-task', (req, res) =>{
     })
 })
 
+app.post('/complete-task', (req, res) =>{
+    const q = 'update todos set status = ? where id = ?'
+    db.query(q, ['completed', req.body.id], (err,result) =>{
+        if (result) {
+            db.query('select * from todos', (e, newList) =>{
+                res.send(newList);
+            })
+        } else {
+            
+        }
+    })
+})
+
 app.listen(5000, () => {
     console.log("Server Started");
 })
