@@ -1,4 +1,5 @@
 Task Manager Application
+
 This is a small React application that allows users to manage a list of tasks. Users can add, edit, delete, and mark tasks as completed. Additionally, tasks can be filtered based on their status.
 
 Features
